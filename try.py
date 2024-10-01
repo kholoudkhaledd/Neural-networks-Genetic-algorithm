@@ -1,43 +1,80 @@
 import tkinter as tk
-from tkinter import Button
 import math
 
-# Function to draw a flower in a given canvas
-def draw_flower(canvas, x, y, petal_radius=30, center_radius=20):
-    # Draw petals
+fitness = []
+
+# Create the main window
+root = tk.Tk()
+root.title("Flower Grid UI")
+
+# Set up a frame for the flower grid
+grid_frame = tk.Frame(root)
+grid_frame.pack(padx=10, pady=10)
+
+# Function to draw a static flower (simple circles for petals)
+def draw_flower(canvas, x, y):
+    # Draw petals (circles)
     for i in range(7):
-        angle = i * (360 / 7)  # Divide the circle into 7 equal parts
-        petal_x = x + petal_radius * math.cos(math.radians(angle))
-        petal_y = y + petal_radius * math.sin(math.radians(angle))
-        canvas.create_oval(petal_x - 15, petal_y - 15, petal_x + 15, petal_y + 15, fill="pink", outline="black")
-
+        angle = math.radians(360 / 7 * i)
+        petal_x = x + 40 * math.cos(angle)
+        petal_y = y + 40 * math.sin(angle)
+        canvas.create_oval(petal_x - 20, petal_y - 20, petal_x + 20, petal_y + 20, fill="purple")
+    
     # Draw the center of the flower
-    canvas.create_oval(x - center_radius, y - center_radius, x + center_radius, y + center_radius, fill="yellow", outline="black")
+    canvas.create_oval(x - 30, y - 30, x + 30, y + 30, fill="orange")
 
-# Create the root window
-window = tk.Tk()
-window.title("Genetic Algorithm For Flowers")
-window.geometry("1200x400")  # Adjusted width for better visibility
+# Function to handle mouse entering a canvas
+def on_enter(canvas, label): 
+    increment_counter(label)  # Start counting
 
-# Button for evolving new generations
-button = Button(window, text="Evolve New Generations")
-button.grid(row=0, columnspan=8, pady=(5, 10))  # Button in row 0, spans all columns
+# Recursive function to increment the counter
+def increment_counter(label):
+    current_count = int(label['text'])
+    label['text'] = str(current_count + 1)  # Increment the label text
+    label.after_id = label.after(100, increment_counter, label)  # Repeat every 1000ms (1 second)
+    for i in range (0,len(fitness)):
+        if(label== fitness[i]):
+            fitness[i]['text'] = label['text']
 
-# Create a grid with 1 row and 8 columns for flower frames starting from row 1
-for i in range(1):  # Only one row for flowers
-    for j in range(8):  # Eight columns
-        frame = tk.Frame(window, borderwidth=2, width=150, height=300, bg="white")
-        frame.grid(row=1, column=j, padx=15, pady=20)  # Start placing frames from row 1
 
-        # Create a canvas in each frame
-        canvas = tk.Canvas(frame, bg="white", width=150, height=300)
-        canvas.pack(expand=True)
 
-        # Draw a flower in the canvas
-        draw_flower(canvas, 75, 150)  # Center the flower in the canvas
+# Function to handle mouse leaving a canvas
+def on_leave( label):
+    print("ON LEAVEEE!!")
+    print("fitness:",fitness)
+    if hasattr(label, 'after_id'):
+        label.after_cancel(label.after_id) 
+    # Optionally, you can keep the last counted value or reset it
+    # You can do nothing or set a specific behavior here
 
-# Start the GUI event loop
-window.mainloop()
+# Create a grid of 1 row and 8 columns with static flower drawings
+cols = 8  # 1 row and 8 columns for the grid
+for col in range(cols):
+    # Create a canvas for each box in the grid
+    canvas = tk.Canvas(grid_frame, width=140, height=140, bg="white", bd=2, relief="solid")
+    canvas.grid(row=0, column=col, padx=5, pady=5)
+
+    # Draw a static flower on the canvas
+    draw_flower(canvas, 70, 70)  # Center the flower at (70, 70)
+
+    # Create a label to display the counter
+    label = tk.Label(canvas, text="0", font=("Arial", 14), bg="white")
+    fitness.append(label)
+    label.place(relx=0.5, rely=0.8, anchor="center")  # Center the label below the flower
+
+    # Bind mouse enter and leave events
+    canvas.bind("<Enter>", lambda event, c=canvas, l=label: on_enter(c, l))
+    canvas.bind("<Leave>", lambda event, l=label: on_leave(l))
+
+# Add a button below the grid
+def on_button_click():
+    print("Button clicked!")
+
+button = tk.Button(root, text="Click Me", command=on_button_click)
+button.pack(pady=20)
+
+# Start the Tkinter main loop
+root.mainloop()
 
 
 # Main method 
