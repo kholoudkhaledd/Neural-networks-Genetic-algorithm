@@ -25,23 +25,26 @@ def draw_flower(canvas, x, y):
 
 # Function to handle mouse entering a canvas
 def on_enter(canvas, label): 
+    print(canvas)
+    print(label)
     increment_counter(label)  # Start counting
 
 # Recursive function to increment the counter
 def increment_counter(label):
+
     current_count = int(label['text'])
     label['text'] = str(current_count + 1)  # Increment the label text
     label.after_id = label.after(100, increment_counter, label)  # Repeat every 1000ms (1 second)
-    for i in range (0,len(fitness)):
-        if(label== fitness[i]):
-            fitness[i]['text'] = label['text']
+
 
 
 
 # Function to handle mouse leaving a canvas
 def on_leave( label):
     print("ON LEAVEEE!!")
-    print("fitness:",fitness)
+    
+    for i in range (0,8):
+        print(fitness[i]['text'])
     if hasattr(label, 'after_id'):
         label.after_cancel(label.after_id) 
     # Optionally, you can keep the last counted value or reset it
@@ -59,8 +62,11 @@ for col in range(cols):
 
     # Create a label to display the counter
     label = tk.Label(canvas, text="0", font=("Arial", 14), bg="white")
-    fitness.append(label)
     label.place(relx=0.5, rely=0.8, anchor="center")  # Center the label below the flower
+
+    label.canvas_id = canvas.winfo_id()
+    fitness.append(label)
+
 
     # Bind mouse enter and leave events
     canvas.bind("<Enter>", lambda event, c=canvas, l=label: on_enter(c, l))
@@ -80,3 +86,4 @@ root.mainloop()
 # Main method 
 if __name__ == "__main__":
     draw_flower()
+    
