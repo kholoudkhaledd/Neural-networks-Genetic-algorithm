@@ -3,51 +3,48 @@ import random
 # If dna is not provided, a random DNA string is generated using the generate_random_dna() 
 class Flower:
     def __init__(self, dna=None):
-        if dna:
-            self.dna = dna  # Use existing binary DNA string if provided
+        if dna and len(dna) == 8:
+            self.dna = dna  
         else:
             self.dna = self.generate_random_dna()
 
         # Decode the DNA string to gene values 
-        self.Sizeofcenter = int(self.dna[0:4], 2)  # First 4 bits
-        self.Colorofcenter = (
-            int(self.dna[4:12], 2),  # Next 8 bits for Red
-            int(self.dna[12:20], 2),  # Next 8 bits for Green
-            int(self.dna[20:28], 2)  # Next 8 bits for Blue
-        )
-        self.Colorofpetals = (
-            int(self.dna[28:36], 2),  # Next 8 bits for Red
-            int(self.dna[36:44], 2),  # Next 8 bits for Green
-            int(self.dna[44:52], 2)  # Next 8 bits for Blue
-        )
-        self.Numberofpetals = int(self.dna[52:55], 2)  # Last 3 bits
-# The link I useed for genratng the binary strings with the n bits
-#  https://www.geeksforgeeks.org/python-program-to-generate-random-binary-string/
-    def generate_binary_string(self,n,gene): 
-        # Generate a random number with n bits
-        if gene:
-            return format(random.randint(1, 10), '04b') 
-        number = random.getrandbits(n)
-        # Add leading zeros to complte n
-        binary_string = format(number, f'0{n}b')
-        return binary_string
-    #Genarte the entre random DNA string for the flower 
-    def generate_random_dna(self):
-        """Generate a random DNA sequence as a binary string."""
-        size_of_center = self.generate_binary_string(4,True)  # 4-bit binary string
-        color_of_center = ''.join([self.generate_binary_string(8,False) for _ in range(3)])  # 3x8-bit RGB
-        color_of_petals = ''.join([self.generate_binary_string(8,False) for _ in range(3)])  # 3x8-bit RGB
-        number_of_petals = self.generate_binary_string(3,False)  # 3-bit binary string
+        self.Sizeofcenter = self.dna[0]  
+        self.Colorofcenterred = self.dna[1]
+        self.Colorofcentergreen = self.dna[2]
+        self.Colorofcenterblue = self.dna[3]
+        self.Colorofpetalsred = self.dna[4]
+        self.Colorofpetalsgreen = self.dna[5]
+        self.Colorofpetalsblue = self.dna[6]
+        self.Numberofpetals = self.dna[7]
 
-        # Combine all into a single DNA string
-        return size_of_center + color_of_center + color_of_petals + number_of_petals
+    def generate_random_dna(self):
+        size_of_center = random.randint(5,16)  
+        color_of_center_red = random.randint(0,255)
+        color_of_center_green = random.randint(0,255)
+        color_of_center_blue = random.randint(0,255)
+        color_of_petals_red = random.randint(0,255)
+        color_of_petals_green = random.randint(0,255)
+        color_of_petals_blue = random.randint(0,255)
+        number_of_petals = random.randint(0,7)
+        flower = [size_of_center,color_of_center_red,color_of_center_green,color_of_center_blue,
+                  color_of_petals_red,color_of_petals_green,color_of_petals_blue,number_of_petals]
+        return flower
     
     def display(self):
         """Display the flower's characteristics based on DNA String that we decoded in the flower class."""
         print(f"Flower Characteristics:")
         print(f"  - Size of center: {self.Sizeofcenter}")
-        print(f"  - Color of center (RGB): {self.Colorofcenter}")
-        print(f"  - Color of petals (RGB): {self.Colorofpetals}")
+        print(f"  - Color of center red: {self.Colorofcenterred}")
+        print(f"  - Color of center green: {self.Colorofcentergreen}")
+        print(f"  - Color of center blue: {self.Colorofcenterblue}")
+        print(f"  - Color of petals red: {self.Colorofpetalsred}")
+        print(f"  - Color of petals green: {self.Colorofpetalsgreen}")
+        print(f"  - Color of petals blue: {self.Colorofpetalsblue}")
         print(f"  - Number of petals: {self.Numberofpetals}")
-        print(f"  - DNA (Binary): {self.dna}")
 
+# Main method 
+if __name__ == "__main__":    
+    specific_dna = [10, 255, 100, 50, 200, 150, 50, 5]  # Custom DNA
+    custom_flower = Flower(dna=specific_dna)
+    custom_flower.display()  # Corrected by adding parentheses to call the method
