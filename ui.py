@@ -1,10 +1,10 @@
 import tkinter as tk
 import math
-from main import calculate_fitness
-from main import generate_population
-
+# from utils import calculate_fitness
+from main import generate_population,selection_elitism,crossover,mutation,calculate_fitness
+fitnessint=[None]*8
 population = []
-fitness = []
+fitness = [None]*8
 button_clicked = 0
 # Create the main window
 root = tk.Tk()
@@ -54,15 +54,16 @@ def on_leave( label):
     # Optionally, you can keep the last counted value or reset it
     # You can do nothing or set a specific behavior here
 
-def draw_grid():
+def draw_grid(populationentry):
     global population
     global fitness
+    global fitnessint
         # Create a grid of 1 row and 8 columns with static flower drawings
     cols = 8  # 1 row and 8 columns for the grid
     for i in range(cols):
         # Create a canvas for each box in the grid
         canvas = tk.Canvas(grid_frame, width=140, height=140, bg="white", bd=2, relief="solid")
-        canvas.grid(row=0, column=i, padx=5, pady=5)
+        canvas.grid(row=0, column=i, padx=5, pady=15)
 
         # Draw a static flower on the canvas
         print("Population:" ,population)
@@ -74,30 +75,43 @@ def draw_grid():
         label.place(relx=0.5, rely=0.8, anchor="center")  # Center the label below the flower
 
         label.canvas_id = canvas.winfo_id()
-        fitness.append(label)
-
+        
+        fitness[i]=label
+        # Store the label in fitness list
 
         # Bind mouse enter and leave events
         canvas.bind("<Enter>", lambda event, c=canvas, l=label: on_enter(c, l))
         canvas.bind("<Leave>", lambda event, l=label: on_leave(l))
-
 # Add a button below the grid
 def on_button_click():
     global button_clicked
     global fitness
     global population
-    if(button_clicked == 0):
+    global fitnessint
+    
+    if button_clicked == 0:
+        # First population generation
         population = generate_population()
-        print("pop:",population)
-        button_clicked = button_clicked + 1
-        draw_grid()
+        button_clicked += 1
+        draw_grid(population)
     else:
-        calculate_fitness(fitness)
+        for i in range (8):
+            fitnessint[i]=int(fitness[i]['text']) 
+    
+        
+        sorted_population = calculate_fitness(fitnessint,population)
+        selected_population = selection_elitism(sorted_population)
+        crossedover_population = crossover(selected_population)
+        mutated_population = mutation(crossedover_population)
+        draw_grid(mutated_population)
+        population = mutated_population  # Update the global population
+
+    
 
 def rgb_to_hex(rgb):
     return "#%02x%02x%02x" % rgb  
 
-button = tk.Button(root, text="Click Me", command=on_button_click)
+button = tk.Button(root, text="Generate new population", command=on_button_click)
 button.pack(pady=20)
 
 # Start the Tkinter main loop
@@ -106,4 +120,8 @@ root.mainloop()
 
 # Main method 
 if __name__ == "__main__":
-    draw_grid()    
+     
+     population = generate_population()
+     print("pop:",population)
+
+     draw_grid(population)

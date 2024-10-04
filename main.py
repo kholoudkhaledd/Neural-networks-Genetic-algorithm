@@ -3,18 +3,9 @@ from flower import Flower
 import random
 import tkinter as tk
 from tkinter import *
-
-#Generate Random Population
-#Calculate Fitness
-#Selection by Elitism
-#CrossOver Rate 0.75 , 6 Chromosomes
-#Mutate 22 Bits 22/2=11 Bits 
-#Calculate Fitness
-
 crossover_rate =  0.75
 mutation_rate = 0.05
 original_population = []
-
 # Function to generate a population of 8 flowers
 def generate_population(size=8):
     global original_population
@@ -26,26 +17,17 @@ def generate_population(size=8):
         population[i].display() 
     original_population = population       
     return population
+#calaculate fitness for each flower 
+def calculate_fitness(fitness,population):
 
-
-def calculate_fitness(fitness):
-    global original_population
-    # Zip both arrays together
-    fitness_values = []
     print("fit:",type(fitness[0]))
-    combined = list(zip(original_population, fitness))
-    #print("orgpop:", original_population)
-    #print("fitnness:", fitness)
+    combined = list(zip(population, fitness))
+
     # Sort the combined list by the second element (the numbers) in descending order
     combined_sorted = sorted(combined, key=lambda x: x[1], reverse=True)
-    #print("combined:" ,combined_sorted)
-    #print("combined:" ,*combined_sorted)
 
-    # Unzip them back into two lists (objects and numbers)
     sorted_objects, sorted_numbers = zip(*combined_sorted)
     print("sortedobj:" ,list(sorted_objects))
-    selection_elitism(list(sorted_objects))            
-
     return list(sorted_objects)
 
 def selection_elitism(flowers):
@@ -61,8 +43,8 @@ def selection_elitism(flowers):
     flower_population [7] = flower_population[3]
 
     print("flower pop:", flower_population)
-    crossover(flower_population)
-    return 
+   
+    return flower_population
 
 def crossover(flower_population):
 
@@ -93,8 +75,6 @@ def crossover(flower_population):
        print("Flower 2 after crossover:",flower2)
        chromosome1 = 0
        chromosome2 = 0
-    
-    mutation(new_crossedover_population)
     return new_crossedover_population
 
 
@@ -119,41 +99,8 @@ def mutation(crossedover_population):  #mutate 1 flower
        new_mutated_population[random_flower] = Flower(flower)
        print("Flower after mutation:",flower)
 
-
-
-
     return new_mutated_population
 
-
-
-
-#Extra Methods
-def flip_bits(dna):
-  
-  indices = random.sample(range(55), 11)
-  print("indices to be changed:",indices)
-  dna_list  = list(dna)  
-    
-  for index in indices:
-    if  dna_list[index] == '0':
-      dna_list[index] = '1'
-    else: 
-      dna_list[index] = '0'
-
-  return ''.join(dna_list) 
-
-
-
-
-        
-
-
-
-# Main method 
-if __name__ == "__main__":
-   population = generate_population() 
-   fitness = [10,0,0,3,19,8,1,6]
-   calculate_fitness(fitness)
 
 
    
