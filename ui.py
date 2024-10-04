@@ -1,11 +1,12 @@
 import tkinter as tk
 import math
-# from utils import calculate_fitness
 from main import generate_population,selection_elitism,crossover,mutation,calculate_fitness
+
 fitnessint=[None]*8
 population = []
 fitness = [None]*8
 button_clicked = 0
+generation_number = 0
 # Create the main window
 root = tk.Tk()
 root.title("Flower Grid UI")
@@ -13,6 +14,7 @@ root.title("Flower Grid UI")
 # Set up a frame for the flower grid
 grid_frame = tk.Frame(root)
 grid_frame.pack(padx=10, pady=10)
+
 
 # Function to draw a static flower (simple circles for petals)
 def draw_flower(canvas, x, y, flower):
@@ -25,12 +27,10 @@ def draw_flower(canvas, x, y, flower):
         canvas.create_oval(petal_x - 20, petal_y - 20, petal_x + 20, petal_y + 20, fill=rgb_to_hex((flower[4],flower[5],flower[6])))
     
     # Draw the center of the flower
-    canvas.create_oval(x - 30, y - 30, x + 30, y + 30, fill=rgb_to_hex((flower[1],flower[2],flower[3])))
+    canvas.create_oval(x - flower[0], y - flower[0], x + flower[0], y + flower[0], fill=rgb_to_hex((flower[1],flower[2],flower[3])))
 
 # Function to handle mouse entering a canvas
 def on_enter(canvas, label): 
-    print(canvas)
-    print(label)
     increment_counter(label)  # Start counting
 
 # Recursive function to increment the counter
@@ -66,7 +66,6 @@ def draw_grid(populationentry):
         canvas.grid(row=0, column=i, padx=5, pady=15)
 
         # Draw a static flower on the canvas
-        print("Population:" ,population)
         flower = population[i].dna
         draw_flower(canvas, 70, 70, flower)  # Center the flower at (70, 70)
 
@@ -88,6 +87,7 @@ def on_button_click():
     global fitness
     global population
     global fitnessint
+    global generation_number
     
     if button_clicked == 0:
         # First population generation
@@ -106,6 +106,9 @@ def on_button_click():
         draw_grid(mutated_population)
         population = mutated_population  # Update the global population
 
+        generation_number += 1
+        generation_label.config(text=f"Generation: {generation_number}")
+
     
 
 def rgb_to_hex(rgb):
@@ -113,6 +116,10 @@ def rgb_to_hex(rgb):
 
 button = tk.Button(root, text="Generate new population", command=on_button_click)
 button.pack(pady=20)
+
+# Add a label for generation number
+generation_label = tk.Label(root, text=f"Generation: {generation_number}", font=("Arial", 16))
+generation_label.pack(pady=10)
 
 # Start the Tkinter main loop
 root.mainloop()
@@ -122,6 +129,4 @@ root.mainloop()
 if __name__ == "__main__":
      
      population = generate_population()
-     print("pop:",population)
-
      draw_grid(population)

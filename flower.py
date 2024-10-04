@@ -19,7 +19,7 @@ class Flower:
         self.Numberofpetals = self.dna[7]
 
     def generate_random_dna(self):
-        size_of_center = random.randint(5,16)  
+        size_of_center = random.randint(8,32)  
         color_of_center_red = random.randint(0,255)
         color_of_center_green = random.randint(0,255)
         color_of_center_blue = random.randint(0,255)

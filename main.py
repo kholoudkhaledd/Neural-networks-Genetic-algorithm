@@ -3,7 +3,7 @@ from flower import Flower
 import random
 import tkinter as tk
 from tkinter import *
-crossover_rate =  0.75
+crossover_rate =  0.25
 mutation_rate = 0.05
 original_population = []
 # Function to generate a population of 8 flowers
@@ -20,14 +20,14 @@ def generate_population(size=8):
 #calaculate fitness for each flower 
 def calculate_fitness(fitness,population):
 
-    print("fit:",type(fitness[0]))
+    #print("fit:",type(fitness[0]))
     combined = list(zip(population, fitness))
 
     # Sort the combined list by the second element (the numbers) in descending order
     combined_sorted = sorted(combined, key=lambda x: x[1], reverse=True)
 
     sorted_objects, sorted_numbers = zip(*combined_sorted)
-    print("sortedobj:" ,list(sorted_objects))
+    #print("sortedobj:" ,list(sorted_objects))
     return list(sorted_objects)
 
 def selection_elitism(flowers):
@@ -91,13 +91,17 @@ def mutation(crossedover_population):  #mutate 1 flower
        flower = new_mutated_population[random_flower].dna
        print("Flower before mutation:",flower)
        if(random_gene == 0): #size of center
-          flower[random_gene] = random.randint(5,16)
+          flower[random_gene] = random.randint(8,32)
        elif(random_gene == 7): #number of petals
           flower[random_gene] = random.randint(0,7)
        else:
           flower[random_gene] = random.randint(0,255)   
        new_mutated_population[random_flower] = Flower(flower)
        print("Flower after mutation:",flower)
+
+    for  i in range (0,8):
+        print("Flower:",i)
+        new_mutated_population[i].display() 
 
     return new_mutated_population
 
