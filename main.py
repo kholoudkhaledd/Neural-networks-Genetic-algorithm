@@ -2,13 +2,12 @@ from flower import Flower
 import random
 import tkinter as tk
 from tkinter import *
-crossover_rate =  0.25
+crossover_rate =  0.50
 mutation_rate = 0.05
 original_population = []
 
 def generate_population(size=8):
     global original_population
-   
     population = [Flower() for _ in range(size)]
     for  i in range (0,size):
         print("Flower:",i)
@@ -17,24 +16,16 @@ def generate_population(size=8):
     return population
 
 def calculate_fitness(fitness,population):
-
-   
     combined = list(zip(population, fitness))
-
-
     combined_sorted = sorted(combined, key=lambda x: x[1], reverse=True)
-
     sorted_objects, sorted_numbers = zip(*combined_sorted)
-
     return list(sorted_objects)
 
 def selection_elitism(flowers):
-
     flower_population = [None]*8
     print("len:" ,len(flowers))
     for i in range (0,4):
        flower_population[i] = flowers[i]
-
     flower_population [4] = flower_population[0]   
     flower_population [5] = flower_population[1]
     flower_population [6] = flower_population[2]
@@ -70,7 +61,6 @@ def crossover(flower_population):
         point2 = random.randint(point1, 7)
         
         print(f"Crossover points: {point1}, {point2}")
-        
         
         for j in range(point1, point2 + 1):
         
