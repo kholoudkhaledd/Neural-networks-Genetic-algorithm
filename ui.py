@@ -16,18 +16,24 @@ grid_frame = tk.Frame(root)
 grid_frame.pack(padx=10, pady=10)
 
 
-# Function to draw a static flower (simple circles for petals)
 def draw_flower(canvas, x, y, flower):
-    # Draw petals (circles)
-     
-    for i in range(flower[7]):
-        angle = math.radians(360 / 7 * i)
+    # Extract flower characteristics
+    center_size = flower[0]
+    center_color = (flower[1], flower[2], flower[3])
+    petal_color = (flower[4], flower[5], flower[6])
+    num_petals = flower[7]
+    
+    # Draw petals (evenly spaced)
+    for i in range(num_petals):
+        # Adjust the angle to evenly distribute the petals
+        angle = math.radians(360 / num_petals * i)
         petal_x = x + 40 * math.cos(angle)
         petal_y = y + 40 * math.sin(angle)
-        canvas.create_oval(petal_x - 20, petal_y - 20, petal_x + 20, petal_y + 20, fill=rgb_to_hex((flower[4],flower[5],flower[6])))
+        # Draw each petal (circle)
+        canvas.create_oval(petal_x - 20, petal_y - 20, petal_x + 20, petal_y + 20, fill=rgb_to_hex(petal_color))
     
     # Draw the center of the flower
-    canvas.create_oval(x - flower[0], y - flower[0], x + flower[0], y + flower[0], fill=rgb_to_hex((flower[1],flower[2],flower[3])))
+    canvas.create_oval(x - center_size, y - center_size, x + center_size, y + center_size, fill=rgb_to_hex(center_color))
 
 # Function to handle mouse entering a canvas
 def on_enter(canvas, label): 

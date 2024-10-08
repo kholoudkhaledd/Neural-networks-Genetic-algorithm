@@ -46,35 +46,75 @@ def selection_elitism(flowers):
    
     return flower_population
 
-def crossover(flower_population):
+# def crossover(flower_population):
 
+#     print("----------------CrossOver----------------")
+#     new_crossedover_population = flower_population
+#     number_of_crossover =(int)(8 * crossover_rate) #4
+#     chromosome1 = 0
+#     chromosome2 = 0
+#     print("Number of chrormosomes to be crossedover:", number_of_crossover)
+#     for i in range(0 , number_of_crossover , 2):
+#        while(chromosome1 == chromosome2):
+#              chromosome1 = random.randint(0,7)
+#              print("Index 1:",chromosome1)
+#              chromosome2 = random.randint(0,7) 
+#              print("Index 2:",chromosome2)
+#        flower1 = flower_population[chromosome1].dna
+#        print("Flower 1 before crossover:",flower1)
+#        flower2 = flower_population[chromosome2].dna 
+#        print("Flower 2 before crossover:",flower2)
+#        dna_to_be_flipped = random.randint(0,7)
+#        print("Index to be flipped:",dna_to_be_flipped)
+#        temp = flower1[dna_to_be_flipped]
+#        flower1[dna_to_be_flipped] = flower2[dna_to_be_flipped]
+#        flower2[dna_to_be_flipped] = temp
+#        new_crossedover_population[chromosome1] = Flower(flower1)
+#        print("Flower 1 after crossover:",flower1)
+#        new_crossedover_population[chromosome2] = Flower(flower2)  
+#        print("Flower 2 after crossover:",flower2)
+#        chromosome1 = 0
+#        chromosome2 = 0
+#     return new_crossedover_population
+# Crossover function for flowers
+def crossover(flower_population):
     print("----------------CrossOver----------------")
+    
     new_crossedover_population = flower_population
-    number_of_crossover =(int)(8 * crossover_rate) #4
-    chromosome1 = 0
-    chromosome2 = 0
-    print("Number of chrormosomes to be crossedover:", number_of_crossover)
-    for i in range(0 , number_of_crossover , 2):
-       while(chromosome1 == chromosome2):
-             chromosome1 = random.randint(0,7)
-             print("Index 1:",chromosome1)
-             chromosome2 = random.randint(0,7) 
-             print("Index 2:",chromosome2)
-       flower1 = flower_population[chromosome1].dna
-       print("Flower 1 before crossover:",flower1)
-       flower2 = flower_population[chromosome2].dna 
-       print("Flower 2 before crossover:",flower2)
-       dna_to_be_flipped = random.randint(0,7)
-       print("Index to be flipped:",dna_to_be_flipped)
-       temp = flower1[dna_to_be_flipped]
-       flower1[dna_to_be_flipped] = flower2[dna_to_be_flipped]
-       flower2[dna_to_be_flipped] = temp
-       new_crossedover_population[chromosome1] = Flower(flower1)
-       print("Flower 1 after crossover:",flower1)
-       new_crossedover_population[chromosome2] = Flower(flower2)  
-       print("Flower 2 after crossover:",flower2)
-       chromosome1 = 0
-       chromosome2 = 0
+    
+    # Calculate the number of chromosomes to be crossed over
+    number_of_crossover = int(8 * crossover_rate)
+    print("Number of chromosomes to be crossed over:", number_of_crossover)
+    
+    for i in range(0, number_of_crossover, 2):
+        chromosome1 = random.randint(0,7)
+        chromosome2 = random.randint(0, 7)
+        while chromosome1 == chromosome2:
+            chromosome2 = random.randint(0, 7)
+        
+        flower1 = flower_population[chromosome1].dna
+        flower2 = flower_population[chromosome2].dna
+        
+        print(f"Flower 1 before crossover (Index {chromosome1}): {flower1}")
+        print(f"Flower 2 before crossover (Index {chromosome2}): {flower2}")
+        
+        # two crossover points
+        point1 = random.randint(0, 7)
+        point2 = random.randint(point1, 7)
+        
+        print(f"Crossover points: {point1}, {point2}")
+        
+        # Perform two-point crossover
+        for j in range(point1, point2 + 1):
+            flower1[j], flower2[j] = flower2[j], flower1[j]
+        
+        print(f"Flower 1 after crossover: {flower1}")
+        print(f"Flower 2 after crossover: {flower2}")
+        
+        # Replace the old flowers with the new ones in the new population
+        new_crossedover_population[chromosome1] = Flower(flower1)
+        new_crossedover_population[chromosome2] = Flower(flower2)
+    
     return new_crossedover_population
 
 
