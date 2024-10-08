@@ -1,4 +1,3 @@
-# main.py
 from flower import Flower
 import random
 import tkinter as tk
@@ -9,8 +8,7 @@ original_population = []
 
 def generate_population(size=8):
     global original_population
-    """Generate a population of 'size' Flower objects."""
-    print("----------------Generate Population----------------")
+   
     population = [Flower() for _ in range(size)]
     for  i in range (0,size):
         print("Flower:",i)
