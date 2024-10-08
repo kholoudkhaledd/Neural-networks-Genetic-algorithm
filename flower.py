@@ -1,6 +1,5 @@
 import random
-# If dna is provided, it's used as the DNA string for the flower.
-# If dna is not provided, a random DNA string is generated using the generate_random_dna() 
+
 class Flower:
     def __init__(self, dna=None):
         if dna and len(dna) == 8:
@@ -8,7 +7,6 @@ class Flower:
         else:
             self.dna = self.generate_random_dna()
 
-        # Decode the DNA string to gene values 
         self.Sizeofcenter = self.dna[0]  
         self.Colorofcenterred = self.dna[1]
         self.Colorofcentergreen = self.dna[2]
@@ -43,8 +41,7 @@ class Flower:
         print(f"  - Color of petals blue: {self.Colorofpetalsblue}")
         print(f"  - Number of petals: {self.Numberofpetals}")
 
-# Main method 
 if __name__ == "__main__":    
-    specific_dna = [10, 255, 100, 50, 200, 150, 50, 5]  # Custom DNA
+    specific_dna = [10, 255, 100, 50, 200, 150, 50, 5]  
     custom_flower = Flower(dna=specific_dna)
-    custom_flower.display()  # Corrected by adding parentheses to call the method
+    custom_flower.display() 
