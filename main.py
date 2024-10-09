@@ -35,7 +35,6 @@ def selection_elitism(flowers):
    
     return flower_population
 
-
 def crossover(flower_population):
     print("----------------CrossOver----------------")
     
@@ -75,8 +74,6 @@ def crossover(flower_population):
         new_crossedover_population[chromosome2] = Flower(flower2)
     
     return new_crossedover_population
-
-
 def mutation(crossedover_population):  
     
     print("----------------Mutation----------------")

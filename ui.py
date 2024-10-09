@@ -40,16 +40,13 @@ def increment_counter(label):
 
 
 def on_leave( label):
-    print("ON LEAVEEE!!")
-    
-    for i in range (0,8):
-        print(fitness[i]['text'])
+    # for i in range (0,8):
+    #     print(fitness[i]['text'])
     if hasattr(label, 'after_id'):
         label.after_cancel(label.after_id) 
   
 
 def draw_grid(populationentry):
-    global population
     global fitness
     global fitnessint
 
@@ -58,7 +55,7 @@ def draw_grid(populationentry):
         canvas = tk.Canvas(grid_frame, width=140, height=140, bg="white", bd=2, relief="solid")
         canvas.grid(row=0, column=i, padx=5, pady=15)
 
-        flower = population[i].dna
+        flower = populationentry[i].dna
         draw_flower(canvas, 70, 70, flower) 
 
         
@@ -82,7 +79,6 @@ def on_button_click():
     global generation_number
     
     if button_clicked == 0:
-        # First population generation
         population = generate_population()
         button_clicked += 1
         draw_grid(population)
@@ -96,8 +92,7 @@ def on_button_click():
         crossedover_population = crossover(selected_population)
         mutated_population = mutation(crossedover_population)
         draw_grid(mutated_population)
-        population = mutated_population  # Update the global population
-
+        population = mutated_population 
         generation_number += 1
         generation_label.config(text=f"Generation: {generation_number}")
 
@@ -109,15 +104,11 @@ def rgb_to_hex(rgb):
 button = tk.Button(root, text="Generate new population", command=on_button_click)
 button.pack(pady=20)
 
-# Add a label for generation number
 generation_label = tk.Label(root, text=f"Generation: {generation_number}", font=("Arial", 16))
 generation_label.pack(pady=10)
 
-# Start the Tkinter main loop
 root.mainloop()
 
-
-# Main method 
 if __name__ == "__main__":
      
      population = generate_population()
