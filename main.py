@@ -47,36 +47,49 @@ def selection_elitism(flowers):
     return flower_population
 
 def crossover(flower_population):
-
     print("----------------CrossOver----------------")
-    new_crossedover_population = flower_population
-    number_of_crossover =(int)(8 * crossover_rate) #4
-    chromosome1 = 0
-    chromosome2 = 0
-    print("Number of chrormosomes to be crossedover:", number_of_crossover)
-    for i in range(0 , number_of_crossover , 2):
-       while(chromosome1 == chromosome2):
-             chromosome1 = random.randint(0,7)
-             print("Index 1:",chromosome1)
-             chromosome2 = random.randint(0,7) 
-             print("Index 2:",chromosome2)
-       flower1 = flower_population[chromosome1].dna
-       print("Flower 1 before crossover:",flower1)
-       flower2 = flower_population[chromosome2].dna 
-       print("Flower 2 before crossover:",flower2)
-       dna_to_be_flipped = random.randint(0,7)
-       print("Index to be flipped:",dna_to_be_flipped)
-       temp = flower1[dna_to_be_flipped]
-       flower1[dna_to_be_flipped] = flower2[dna_to_be_flipped]
-       flower2[dna_to_be_flipped] = temp
-       new_crossedover_population[chromosome1] = Flower(flower1)
-       print("Flower 1 after crossover:",flower1)
-       new_crossedover_population[chromosome2] = Flower(flower2)  
-       print("Flower 2 after crossover:",flower2)
-       chromosome1 = 0
-       chromosome2 = 0
-    return new_crossedover_population
+    
+    # Create a deep copy of the flower population to avoid modifying the original list in place
+    
+    number_of_crossover = int(8 * crossover_rate)  # 4
+    print("Number of chromosomes to be crossed over:", number_of_crossover)
 
+    for i in range(0, number_of_crossover, 2):
+        chromosome1, chromosome2 = 0, 0
+        flower1, flower2 = [], []
+        
+        # Loop until two different chromosomes are selected and their DNA is not the same
+        while chromosome1 == chromosome2 or chromosomeraresame(flower1, flower2):
+            chromosome1 = random.randint(0, 7)
+            chromosome2 = random.randint(0, 7)
+            
+            # Assign the DNA sequences for the selected chromosomes
+            flower1 = new_crossedover_population[chromosome1].dna
+            flower2 = new_crossedover_population[chromosome2].dna
+        
+        print(f"Selected Chromosome 1: {chromosome1}, DNA: {flower1}")
+        print(f"Selected Chromosome 2: {chromosome2}, DNA: {flower2}")
+        # Randomly choose crossover points
+        point1 = random.randint(0, len(flower1) - 1)
+        point2 = random.randint(0, len(flower2) - 1)
+        # Ensure point1 is less than point2
+        if point1 > point2:
+            point1, point2 = point2, point1
+        
+        print(f"Crossover points: {point1}, {point2}")
+
+        # Perform crossover between point1 and point2
+        for j in range(point1, point2 + 1):
+            flower1[j], flower2[j] = flower2[j], flower1[j]
+        new_crossedover_population[chromosome1]=Flower(flower1)
+        new_crossedover_population[chromosome2]=Flower(flower2)
+
+        print("Flower 1 after crossover:", flower1)
+        print("Flower 2 after crossover:", flower2)
+        print("-----------------------after crossover before return -----------------")
+      
+
+    return new_crossedover_population
 
 def mutation(crossedover_population):  #mutate 1 flower
     
